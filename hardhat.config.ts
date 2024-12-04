@@ -7,18 +7,28 @@ dotenv.config();
 const config: HardhatUserConfig = {
   solidity: "0.8.28",
   networks: {
-    sepolia: {
-      url: process.env.SEPOLIA_RPC_URL,
-      ...(process.env["LIT_SEPOLIA_DEPLOYER_PRIVATE_KEY"] && {
-        accounts: [process.env["LIT_SEPOLIA_DEPLOYER_PRIVATE_KEY"]],
+    arbitrumSepolia: {
+      url: process.env.ARB_SEPOLIA_RPC_URL,
+      ...(process.env["LIT_ARB_SEPOLIA_DEPLOYER_PRIVATE_KEY"] && {
+        accounts: [process.env["LIT_ARB_SEPOLIA_DEPLOYER_PRIVATE_KEY"]],
       }),
-      chainId: 11155111,
+      chainId: 421614,
     },
   },
   etherscan: {
     apiKey: {
-      sepolia: process.env.LIT_ETHERSCAN_API_KEY!,
+      arbitrumSepolia: process.env.LIT_ARBISCAN_API_KEY!,
     },
+    customChains: [
+      {
+        network: "arbitrumSepolia",
+        chainId: 421614,
+        urls: {
+          apiURL: "https://api-sepolia.arbiscan.io/api",
+          browserURL: "https://sepolia.arbiscan.io",
+        },
+      },
+    ],
   },
 };
 
