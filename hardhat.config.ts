@@ -14,10 +14,18 @@ const config: HardhatUserConfig = {
       }),
       chainId: 421614,
     },
+    sepolia: {
+      url: process.env.SEPOLIA_RPC_URL,
+      ...(process.env["LIT_SEPOLIA_DEPLOYER_PRIVATE_KEY"] && {
+        accounts: [process.env["LIT_SEPOLIA_DEPLOYER_PRIVATE_KEY"]],
+      }),
+      chainId: 11155111,
+    },
   },
   etherscan: {
     apiKey: {
       arbitrumSepolia: process.env.LIT_ARBISCAN_API_KEY!,
+      sepolia: process.env.LIT_ETHERSCAN_API_KEY!,
     },
     customChains: [
       {
