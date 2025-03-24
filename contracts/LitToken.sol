@@ -3,25 +3,21 @@ pragma solidity ^0.8.28;
 
 import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Capped.sol";
 
 /// @title Lit Protocol Token
 ///
 /// @dev This is the contract for the Lit Protocol DAO token, capped at 1bn tokens.
-contract LitToken is ERC20, Ownable {
+contract LitToken is ERC20, Ownable, ERC20Capped {
 
-    // initial supply cap of 1bn tokens
-    uint256 public supplyCap = 1000000000 * (10**uint256(18));
-
-    constructor() ERC20("Test Lit", "tLit") Ownable(msg.sender) {}
+    constructor() ERC20("Lit Key", "LITKEY") Ownable(msg.sender) ERC20Capped(1000000000 * (10**uint256(18))) {
+    }
 
     function mint(address to, uint256 amount) public onlyOwner {
-        // ensure minting does not exceed supply cap
-        require(totalSupply() + amount <= supplyCap, "Supply cap exceeded");
         _mint(to, amount);
     }
-    function updateSupplyCap(uint256 newSupplyCap) public onlyOwner {
-        // ensure new supply cap is greater than current supply
-        require(newSupplyCap > totalSupply(), "New supply cap must be greater than current supply");
-        supplyCap = newSupplyCap;
+
+    function _update(address from, address to, uint256 value) internal override(ERC20, ERC20Capped) {
+        super._update(from, to, value);
     }
 }
